@@ -1,23 +1,19 @@
-#include <unordered_map>
-
-// 1. Define the Node struct FIRST so the compiler knows it exists
-struct Node {
-    int key;
+struct Node{
     int value;
-    Node* prev;
+    int key;
     Node* next;
-    
-    Node(int k, int v) : key(k), value(v), prev(nullptr), next(nullptr) {}
+    Node* prev;
+
+    Node (int key , int value) : key(key) , value(value) , prev(nullptr) , next(nullptr) {}
 };
 
-// 2. Then define your LRUCache class
 class LRUCache {
 private:
     int capacity;
+    int size = 0;
     std::unordered_map<int, Node*> my_cache_map;
     Node* head;
     Node* tail;
-
     void removeNode(Node* node) {
         node->prev->next = node->next;
         node->next->prev = node->prev;
@@ -37,8 +33,8 @@ public:
         head = new Node(0, 0);
         tail = new Node(0, 0);
 
-        head->next = tail;
         tail->prev = head;
+        head->next = tail;
     }
 
     int get(int key) {
@@ -52,7 +48,7 @@ public:
     }
 
     void put(int key, int value) {
-        if (my_cache_map.find(key) != my_cache_map.end()) {
+        if (my_cache_map.find(key) != my_cache_map.end()){
             Node* node = my_cache_map[key];
             node->value = value;
             removeNode(node);
@@ -60,15 +56,27 @@ public:
             return;
         }
 
-        if (my_cache_map.size() >= capacity) {
-            Node* lruNode = tail->prev;
-            removeNode(lruNode);
-            my_cache_map.erase(lruNode->key);
-            delete lruNode;
+        if(size >= capacity){
+            Node* node = tail->prev;
+            removeNode(node);
+            my_cache_map.erase(node->key);
+            delete node;
+            size--;
+            
         }
 
-        Node* newNode = new Node(key, value);
-        my_cache_map[key] = newNode;
-        addToFront(newNode);
+        Node* node = new Node(key , value);
+        my_cache_map[key] = node;
+        addToFront(node);
+        size++;
+
+
     }
 };
+
+/**
+ * Your LRUCache object will be instantiated and called as such:
+ * LRUCache* obj = new LRUCache(capacity);
+ * int param_1 = obj->get(key);
+ * obj->put(key,value);
+ */
