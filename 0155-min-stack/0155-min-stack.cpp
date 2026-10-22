@@ -1,46 +1,27 @@
-static const int __ = []() {
-    std::ios_base::sync_with_stdio(false);
-    std::cin.tie(NULL);
-    return 0;
-}();
-
 class MinStack {
 private:
-    std::stack<int> mainStack;
-    std::stack<int> minStack;
-    
+    vector<pair<int, int>> st; // {val, current_min}
 
 public:
     MinStack() {}
-
-    void push(int value) {
-      mainStack.push(value);
-      if(minStack.empty() || minStack.top() >= value){
-        minStack.push(value);
-      }
-    }
-
-    void pop() {
-        if(mainStack.top() == minStack.top()){
-            minStack.pop();
+    
+    void push(int val) {
+        if (st.empty()) {
+            st.push_back({val, val});
+        } else {
+            st.push_back({val, min(val, st.back().second)});
         }
-        mainStack.pop();
     }
-
+    
+    void pop() {
+        st.pop_back();
+    }
+    
     int top() {
-        return mainStack.top();
+        return st.back().first;
     }
-
+    
     int getMin() {
-        return minStack.top();
+        return st.back().second;
     }
 };
-
-/**
- * Your MinStack object will be instantiated and called as such:
- * MinStack* obj = new MinStack();
- * obj->push(value);
- * obj->pop();
- * int param_3 = obj->top();
- * int param_4 = obj->getMin();
- */
