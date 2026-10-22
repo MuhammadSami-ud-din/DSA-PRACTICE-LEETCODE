@@ -1,3 +1,9 @@
+static const int __ = []() {
+    std::ios_base::sync_with_stdio(false);
+    std::cin.tie(NULL);
+    return 0;
+}();
+
 class MinStack {
 private:
     std::stack<int> mainStack;
