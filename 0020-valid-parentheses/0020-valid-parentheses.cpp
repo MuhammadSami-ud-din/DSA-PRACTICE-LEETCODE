@@ -7,49 +7,20 @@ public:
 
         while (i < s.length()) {
 
-            if (s[i] == '{') {
+            if (s[i] == '{' || s[i] == '(' || s[i] == '[') {
                 st.push(s[i]);
-
-            } else if (s[i] == '}') {
+            } else {
                 if (st.empty())
                     return false;
-                if (st.top() == '{') {
-                    Balanced = true;
-                    st.pop();
 
-                } else {
+                if (s[i] == ']' && st.top() != '[')
                     return false;
-                }
-            }
-
-            if (s[i] == '[') {
-                st.push(s[i]);
-
-            } else if (s[i] == ']') {
-                if (st.empty())
+                if (s[i] == '}' && st.top() != '{')
                     return false;
-                if (st.top() == '[') {
-                    Balanced = true;
-                    st.pop();
-
-                } else {
+                if (s[i] == ')' && st.top() != '(')
                     return false;
-                }
-            }
 
-            if (s[i] == '(') {
-                st.push(s[i]);
-
-            } else if (s[i] == ')') {
-                if (st.empty())
-                    return false;
-                if (st.top() == '(') {
-                    Balanced = true;
-                    st.pop();
-
-                } else {
-                    return false;
-                }
+                st.pop();
             }
 
             i++;
